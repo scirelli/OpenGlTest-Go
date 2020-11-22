@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"math"
 	"runtime"
 
 	"github.com/go-gl/gl/v4.1-core/gl"
@@ -42,4 +43,27 @@ func main() {
 		win.SwapBuffers()
 		glfw.PollEvents()
 	}
+}
+
+/*
+ * Function that handles the drawing of a circle using the triangle fan
+ * method. This will create a filled circle.
+ *
+ * Params:
+ *	x (GLFloat) - the x position of the center point of the circle
+ *	y (GLFloat) - the y position of the center point of the circle
+ *	radius (GLFloat) - the radius that the painted circle will have
+ */
+func drawFilledCircle(x, y, radius gl.GLFloat) {
+	var i, triangleAmount gl.GLint = 0, 20 //# of triangles used to draw circle
+
+	//GLfloat radius = 0.8f; //radius
+	var twicePi gl.GLfloat = 2.0 * math.Pi
+
+	gl.GLBegin(gl.GL_TRIANGLE_FAN)
+	gl.GLVertex2f(x, y) // center of circle
+	for i := 0; i <= triangleAmount; i++ {
+		gl.GLVertex2f(x+(radius*math.Cos(i*twicePi/triangleAmount)), y+(radius*math.Sin(i*twicePi/triangleAmount)))
+	}
+	gl.GLEnd()
 }
